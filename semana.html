@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Académico</title>
+  <style>
+    :root {
+      --morado: #a51ca8;
+      --morado-claro: #7278ec;
+      --amarillo: #f9d342;
+      --gris-claro: #f4f6fb;
+      --rosado: #40b768;
+      --azul-claro: #3da9fc;
+      --gris-medio: #9ea6b2;
+      --gris-oscuro: #a51ca8;
+      --fondo-cards: #ffffff;
+      --sombra-cards: rgba(58, 42, 114, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: var(--gris-claro);
+      color: var(--gris-oscuro);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    aside {
+      width: 240px;
+      background-color: var(--morado);
+      color: white;
+      padding: 25px 20px;
+      height: 100vh;
+      position: fixed;
+      box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+    }
+
+    aside h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    aside nav a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin: 18px 0;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    aside nav a:hover,
+    aside nav a:focus {
+      background-color: var(--morado-claro);
+      color: var(--amarillo);
+      outline: none;
+    }
+
+    main {
+      margin-left: 240px;
+      padding: 40px 45px;
+      width: 100%;
+      max-width: 1200px;
+      overflow-x: hidden;
+    }
+
+    section {
+      background: var(--fondo-cards);
+      padding: 30px 35px;
+      border-radius: 14px;
+      box-shadow: 0 10px 20px var(--sombra-cards);
+      margin-bottom: 45px;
+    }
+
+    h1, h2 {
+      color: var(--morado);
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+
+    h3 {
+      color: var(--gris-claro);
+    }
+
+    .estadisticas {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background-color: var(--fondo-cards);
+      border-radius: 14px;
+      padding: 28px 24px;
+      flex: 1 1 280px;
+      text-align: center;
+      box-shadow: 0 10px 20px var(--sombra-cards);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 18px 28px rgba(58, 42, 114, 0.25);
+    }
+
+    .card h2 {
+      font-size: 2.4rem;
+      color: var(--rosado);
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+
+    .card p {
+      color: var(--gris-medio);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .tabla-academica {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 1rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px var(--sombra-cards);
+    }
+
+    .tabla-academica th, .tabla-academica td {
+      border: 1px solid var(--rosado);
+      padding: 14px 18px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .tabla-academica th {
+      background-color: var(--rosado);
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .tabla-academica tr:nth-child(even) {
+      background-color: #fef6f8;
+    }
+
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 22px;
+    }
+
+    .galeria img {
+      width: 100%;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(26, 17, 17, 0.08);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .galeria img:hover {
+      transform: scale(1.07);
+      box-shadow: 0 10px 24px rgba(231, 26, 26, 0.12);
+    }
+
+    .galeria p {
+      color: var(--rosado);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    form label {
+      margin: 14px 0 6px;
+      color: var(--morado);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    form input, form textarea {
+      padding: 14px 18px;
+      border: 2px solid var(--gris-medio);
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    form input:focus, form textarea:focus {
+      border-color: var(--morado-claro);
+      outline: none;
+      background-color: #fafaff;
+    }
+
+    form button {
+  margin-top: 28px;
+  padding: 14px;
+  background-color: var(--rosado);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: white;
+  box-shadow: 0 6px 12px rgba(64, 183, 104, 0.4);
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #369956;
+}
+    .content {
+      display: none;
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px 15px 10px;
+    }
+
+    .content:target {
+      display: block;
+    }
+
+    body:not(:has(:target)) #inicio {
+      display: block;
+    }
+
+    #reportes .cards {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #reportes .card {
+      flex: 1 1 320px;
+      padding: 28px 24px;
+      box-shadow: 0 12px 24px rgba(90, 33, 33, 0.08);
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fef6f8 0%, #fff0f3 100%);
+      text-align: center;
+      color: var(--rosado);
+      font-weight: 700;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+    }
+
+    #reportes .card img {
+      width: 60px;
+      height: 60px;
+      filter: drop-shadow(0 2px 3px rgba(214, 62, 92, 0.3));
+      transition: transform 0.3s ease;
+    }
+
+    #reportes .card h3 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: var(--rosado);
+      text-decoration: none;
+    }
+
+    #reportes .card h3 a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    #reportes .card h3 a:hover,
+    #reportes .card:hover h3 a {
+      color: var(--morado);
+      text-decoration: underline;
+    }
+
+    #reportes .card p {
+      font-weight: 500;
+      font-size: 1rem;
+      color: #6f4146;
+      max-width: 280px;
+    }
+
+    #reportes .card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 18px 36px rgba(214, 62, 92, 0.25);
+      background: linear-gradient(135deg, #ffd9db 0%, #ffe6e8 100%);
+    }
+
+    @media (max-width: 900px) {
+      .estadisticas {
+        flex-direction: column;
+      }
+
+      #reportes .cards {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      aside {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 15px 10px;
+      }
+
+      main {
+        margin-left: 0;
+        padding: 25px 15px;
+      }
+
+      .card, #reportes .card {
+        flex: 1 1 100%;
+      }
+
+      form {
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <aside>
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#reportes">Reportes</a>
+      <a href="#galeria">Galería</a>
+      <a href="#formulario">Formulario</a>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- INICIO -->
+    <section id="inicio" class="content" >
+      <h1>Dashboard Académico</h1>
+      <div class="estadisticas">
+        <div class="card estudiantes">
+          <h2>1200</h2>
+          <p>Estudiantes Registrados</p>
+        </div>
+        <div class="card profesores">
+          <h2>80</h2>
+          <p>Profesores Activos</p>
+        </div>
+        <div class="card cursos">
+          <h2>70</h2>
+          <p>Cursos Disponibles</p>
+        </div>
+      </div>
+
+      <h2>Información Académica</h2>
+      <table class="tabla-academica">
+        <tr>
+          <th>Curso</th>
+          <th>Profesor</th>
+          <th>Horario</th>
+        </tr>
+        <tr><td>Historia del Arte Peruano</td><td>Ing. Selene Sulca</td><td>Lunes y Miércoles, 7:30 - 12:00 pm</td></tr>
+        <tr><td>Tipografía</td><td>Lic. Esteban Mio</td><td>Martes y Jueves, 1:30 - 6:30 pm</td></tr>
+        <tr><td>Dibujo básico</td><td>Dr. Jhordan Tupa</td><td>Viernes, 6:10 - 10:00 pm</td></tr>
+      </table>
+    </section>
+
+    <!-- REPORTES -->
+    <section id="reportes" class="content">
+      <h2>Reportes Académicos</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="attendance-icon-symbol-design-illustration-vector.jpg" alt="Asistencia">
+          <h3><a href="#">Asistencia</a></h3>
+          <p>Promedio de asistencia del semestre actual con detalles por curso y profesor.</p>
+        </div>
+        <div class="card">
+          <img src="xd.jpg" alt="Calificaciones">
+          <h3><a href="#">Calificaciones</a></h3>
+          <p>Resumen detallado de calificaciones y promedios por estudiantes.</p>
+        </div>
+        <div class="card">
+          <img src="p.webp" alt="Matrícula">
+          <h3><a href="#">Matrícula</a></h3>
+          <p>Estado actualizado de la matrícula estudiantil.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERÍA -->
+    <section id="galeria" class="content">
+      <h2>Galería Académica</h2>
+      <div class="galeria">
+        <img src="h.jpeg" alt="Evidencia 1">
+        <p>Toulouse Lautrec y NABA Milán firman convenio internacional de estudios</p>
+        <img src="g.jpeg" alt="Evidencia 2">
+        <p>Toulouse Lautrec destaca en el primer encuentro de Innovación Pública del OEFA</p>
+        <img src="n.jpeg" alt="Evidencia 3">
+        <p>Estudiantes de Toulouse diseñan identidad visual del Museo de Sitio Pucllana</p>
+        <img src="ñ.jpeg" alt="Evidencia 4">
+        <p>Toulouse Lautrec inaugura  nueva sede en Arequipa Novedades</p>
+      </div>
+    </section>
+
+    <!-- FORMULARIO -->
+    <section id="formulario" class="content">
+      <h2>Contacto</h2>
+      <form action="https://www.ucv.edu.pe/" method="get">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+  </main>
+  <footer style="text-align:center; padding: 20px; background-color: var(--rosado); color: white; font-weight: 700; position: fixed; width: 100%; bottom: 0;">
+  Integrantes: Eva Rojas Victorio, Eduardo Obregón Fuertes, Cáceres Juan David
+</footer>
+</body>
+</html>
